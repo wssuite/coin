@@ -1,0 +1,21 @@
+[submodule "Vol"]
+	path = Vol
+	url = https://github.com/coin-or/Vol.git
+[submodule "CoinUtils"]
+	path = CoinUtils
+	url = https://github.com/coin-or/CoinUtils.git
+[submodule "Cbc"]
+	path = Cbc
+	url = https://github.com/coin-or/Cbc.git
+[submodule "Clp"]
+	path = Clp
+	url = https://github.com/coin-or/Clp.git
+[submodule "Osi"]
+	path = Osi
+	url = https://github.com/coin-or/Osi.git
+[submodule "Cgl"]
+	path = Cgl
+	url = https://github.com/coin-or/Cgl.git
+[submodule "Bcp"]
+	path = Bcp
+	url = git@github.com:wssuite/Bcp.git
