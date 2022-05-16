@@ -7,6 +7,7 @@ function printBashUsage {
   echo "-b | --build-dir: name of the build directory."
   echo "-c | --clean: recompile all libraries."
   echo "-d | --debug: build Bcp in debug. The suffix -dbg will be added to the build directory."
+  echo "-p | --prefix: add --prefix=PREFIX --oldincludedir=PREFIX/include to the arguments of the configure script."
   echo "*: it will be passed to the configure script."
 }
 
@@ -33,13 +34,23 @@ while [ ! -z ${A[${i}]} ]; do
    -b | --build-dir) BUILD_DIR=${A[((i+1))]}; ((i+=2));;
    -c | --clean) CLEAN="1"; ((i+=1));;
    -d | --debug) DBG="1"; ((i+=1));;
+   -p | --prefix) PREFIX=${A[((i+1))]}; ((i+=2));;
    *) echo "Argument ${A[${i}]} will be passed to the configure script."
       ARGS="$ARGS ${A[${i}]}"; ((i+=1));;
   esac
 done
 
+OLD=""
+if [[ ! -z PREFIX ]]; then
+  ARGS="$ARGS --prefix=${PREFIX}"
+  OLD="--oldincludedir=${PREFIX}/include"
+fi
+
 CURRENT_DIR="$(pwd)"
 SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+
+# add cxx flags
+ADD_CXXFLAGS="$ADD_CXXFLAGS -std=c++11"
 
 # install one directory
 function install {
@@ -66,7 +77,7 @@ function install {
 }
 
 # install all depedencies
-install CoinUtils
+install CoinUtils $OLD
 install Osi
 install Clp
 install Cgl
