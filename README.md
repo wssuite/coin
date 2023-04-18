@@ -1,3 +1,6 @@
+# COIN OR
+It contains coin-or tools, Branch-Cut-and-Price (BCP) project as well as boost headers, gcc, jdk, and cmake.
+
 # Installation of submodules
 To download the submodules (Clp, Cbc, ...), run ``git submodule update --init --recursive``.
 
