@@ -8,6 +8,7 @@ function printBashUsage {
   echo "-c | --clean: recompile all libraries."
   echo "-d | --debug: build Bcp in debug. The suffix -dbg will be added to the build directory."
   echo "-p | --prefix: add --prefix=PREFIX --oldincludedir=PREFIX/include to the arguments of the configure script."
+  echo "-wc | --with-cbc: install Cbc. By default no."
   echo "*: it will be passed to the configure script."
 }
 
@@ -35,6 +36,7 @@ while [ ! -z ${A[${i}]} ]; do
    -c | --clean) CLEAN="1"; ((i+=1));;
    -d | --debug) DBG="1"; ((i+=1));;
    -p | --prefix) PREFIX=${A[((i+1))]}; ((i+=2));;
+   -wc | --with-cbc) INSTALL_CBC="1"; ((i+=1));;
    *) echo "Argument ${A[${i}]} will be passed to the configure script."
       ARGS="$ARGS ${A[${i}]}"; ((i+=1));;
   esac
@@ -82,7 +84,10 @@ install Osi
 install Clp
 install Cgl
 install Vol
-install Cbc
+
+if [[ ! -z $INSTALL_CBC ]]; then
+  install Cbc
+fi
 
 # install Bcp
 install Bcp
