@@ -10,16 +10,18 @@ RUN apt-get update && \
         liblapack-dev \
         libz-dev \
         openjdk-11-jre-headless \
+        subversion \
         time && \
     # Install valgrind
     apt-get install -y --force-yes --fix-missing valgrind && \
     # Install Boost headers
     wget -O boost_1_68_0.tar.bz2 https://sourceforge.net/projects/boost/files/boost/1.68.0/boost_1_68_0.tar.bz2/download && \
     tar xvf boost_1_68_0.tar.bz2 boost_1_68_0/boost && \
-    mv boost_1_68_0/boost /usr/include && \
+    mv boost_1_68_0/boost /usr/local/include && \
     rm -rf boost_1_68_0*
 
-# Install coin-or suite
-COPY ./ /coin/
-ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig/
-RUN ./coin/install.sh -p /usr -c -wc && rm -rf /coin
+# Copy INSTALL.sh
+COPY ./ /coin
+
+# Install Boost and BCP
+RUN mkdir -p /usr/local && /coin/install.sh -c -p /usr/local && rm -rf /coin
