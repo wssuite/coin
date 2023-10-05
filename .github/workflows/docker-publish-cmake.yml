@@ -1,8 +1,11 @@
-name: Publish Docker image
+name: Publish Docker CMake image
 
 on:
   push:
     tags: [ 'cmake*' ]
+
+env:
+  PLATFORMS: linux/amd64,linux/arm64
 
 jobs:
   push_to_dockerhub:
@@ -34,6 +37,8 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          platforms: $PLATFORMS
 
       - name: Build container
         uses: docker/build-push-action@v5
@@ -41,6 +46,6 @@ jobs:
           context: ./CMakeDocker/
           # push if has been able to login or not a pull request
           push: ${{ job.steps.login.status == 'success' && github.event_name != 'pull_request' }}
-          platforms: linux/amd64,linux/arm64
+          platforms: $PLATFORMS
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
