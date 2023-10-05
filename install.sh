@@ -8,6 +8,7 @@ function printBashUsage {
   echo "-c | --clean: recompile all libraries."
   echo "-d | --debug: build Bcp in debug. The suffix -dbg will be added to the build directory."
   echo "-g | --download-guess: download the latest guess config to the repositories."
+  echo "-m | --make-args: arguments to pass to make. Default '-j'."
   echo "-p | --prefix: add --prefix=PREFIX --oldincludedir=PREFIX/include to the arguments of the configure script."
   echo "-wc | --with-cbc: install Cbc. By default no."
   echo "*: it will be passed to the configure script."
@@ -27,6 +28,7 @@ done
 
 # parse arguments
 ARGS=""
+MAKE_ARGS="-j"
 BUILD_DIR="build"
 i=0
 while [ ! -z ${A[${i}]} ]; do
@@ -37,6 +39,7 @@ while [ ! -z ${A[${i}]} ]; do
    -c | --clean) CLEAN="1"; ((i+=1));;
    -d | --debug) DBG="1"; ((i+=1));;
    -g | --download-guess) DGUESS="1"; ((i+=1));;
+   -m | --make-args) MAKE_ARGS=${A[((i+1))]}; ((i+=2));;
    -p | --prefix) PREFIX=${A[((i+1))]}; ((i+=2));;
    -wc | --with-cbc) INSTALL_CBC="1"; ((i+=1));;
    *) echo "Argument ${A[${i}]} will be passed to the configure script."
@@ -79,7 +82,7 @@ function install {
     mkdir $BUILD_DIR
     cd $BUILD_DIR
     ../configure $ARGS $2
-    make -j
+    make $MAKE_ARGS
     # make test
     make install
   fi
