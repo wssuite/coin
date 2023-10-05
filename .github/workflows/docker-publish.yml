@@ -37,13 +37,12 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          platforms: linux/amd64,linux/arm64
 
       - name: Build container
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: ${{ github.ref_type != 'pull_request' }}
+          push: ${{ github.ref != 'pull_request' }}
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
