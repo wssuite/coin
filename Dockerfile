@@ -22,4 +22,4 @@ RUN apt-get update && \
 # Install coin-or suite
 COPY ./ /coin/
 ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig/
-RUN ./coin/install.sh -p /usr -c -wc -g && rm -rf /coin
+RUN ./coin/install.sh -p /usr -c -wc && rm -rf /coin
