@@ -34,15 +34,13 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          platforms: linux/amd64,linux/arm64
 
       - name: Build container
         uses: docker/build-push-action@v5
         with:
           context: ./CMakeDocker/
           # push if has been able to login or not a pull request
-          push: ${{ job.steps.login.status == 'success' && github.event_name != 'pull_request' }}
+          push: ${{ steps.login.status == 'success' && github.event_name != 'pull_request' }}
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
