@@ -7,7 +7,8 @@ function printBashUsage {
   echo "-b | --build-dir: name of the build directory."
   echo "-c | --clean: recompile all libraries."
   echo "-d | --debug: build Bcp in debug. The suffix -dbg will be added to the build directory."
-  echo "-g | --guess: copy the local guess config to the repositories."
+  echo "-g | --download-guess: download the latest guess config to the repositories."
+  echo "-m | --make-args: arguments to pass to make. Default '-j'."
   echo "-p | --prefix: add --prefix=PREFIX --oldincludedir=PREFIX/include to the arguments of the configure script."
   echo "-wc | --with-cbc: install Cbc. By default no."
   echo "*: it will be passed to the configure script."
@@ -27,16 +28,18 @@ done
 
 # parse arguments
 ARGS=""
+MAKE_ARGS="-j"
 BUILD_DIR="build"
 i=0
 while [ ! -z ${A[${i}]} ]; do
   case ${A[${i}]} in
-    -h|--help) printBashUsage
+   -h | --help) printBashUsage
       exit 0;;
    -b | --build-dir) BUILD_DIR=${A[((i+1))]}; ((i+=2));;
    -c | --clean) CLEAN="1"; ((i+=1));;
    -d | --debug) DBG="1"; ((i+=1));;
-   -g | --guess) CGUESS="1"; ((i+=1));;
+   -g | --download-guess) DGUESS="1"; ((i+=1));;
+   -m | --make-args) MAKE_ARGS=${A[((i+1))]}; ((i+=2));;
    -p | --prefix) PREFIX=${A[((i+1))]}; ((i+=2));;
    -wc | --with-cbc) INSTALL_CBC="1"; ((i+=1));;
    *) echo "Argument ${A[${i}]} will be passed to the configure script."
@@ -66,13 +69,11 @@ function install {
   if [[ ! -z $CLEAN ]]; then
     rm -rf $BUILD_DIR
   fi
-  if [[ ! -z $CGUESS ]]; then
-    echo "Copy guess configurations"
-    cp $SCRIPT_DIR/config.* .
-    # if directory $1 exist, also copy configurations in it
-    if [ -d "$1" ]; then
-      cp $SCRIPT_DIR/config.* $1
-    fi
+  echo "Copy local guess configurations"
+  cp $SCRIPT_DIR/config.* .
+  # if directory $1 exist, also copy configurations in it
+  if [ -d "$1" ]; then
+    cp $SCRIPT_DIR/config.* $1
   fi
   if [[ -d "$BUILD_DIR" ]]; then
     echo "$LIB has already been attempted to be compiled. Please remove directory $BUILD_DIR to recompile."
@@ -81,7 +82,7 @@ function install {
     mkdir $BUILD_DIR
     cd $BUILD_DIR
     ../configure $ARGS $2
-    make -j
+    make $MAKE_ARGS
     # make test
     make install
   fi
@@ -89,7 +90,7 @@ function install {
 }
 
 # download latest guess config
-if [[ ! -z $CGUESS ]]; then
+if [[ ! -z $DGUESS ]]; then
   cd $SCRIPT_DIR
   echo "Download guess configurations"
   wget 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD' -O './config.guess'

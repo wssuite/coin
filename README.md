@@ -1,4 +1,8 @@
 # COIN OR
+
+[![Publish Docker image](https://github.com/wssuite/coin/actions/workflows/docker-publish-bcp.yml/badge.svg)](https://github.com/wssuite/coin/actions/workflows/docker-publish-bcp.yml)
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/legraina/bcp)](https://hub.docker.com/repository/docker/legraina/bcp/)
+
 It contains coin-or tools, Branch-Cut-and-Price (BCP) project as well as boost headers, gcc, jdk, and cmake.
 
 # Installation of submodules
