@@ -33,7 +33,7 @@ BUILD_DIR="build"
 i=0
 while [ ! -z ${A[${i}]} ]; do
   case ${A[${i}]} in
-    -h|--help) printBashUsage
+   -h | --help) printBashUsage
       exit 0;;
    -b | --build-dir) BUILD_DIR=${A[((i+1))]}; ((i+=2));;
    -c | --clean) CLEAN="1"; ((i+=1));;
