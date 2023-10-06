@@ -5,8 +5,6 @@ if [[ ! -z $1 ]]; then
   VERSION=$1
 fi
 
-# build docker image
-docker build -t legraina/cmake:$VERSION --build-arg cmake_version=$VERSION .
-
-# image push
-docker image push legraina/cmake:$VERSION
+# build docker image multiplatform
+docker buildx build . -t legraina/cmake -t legraina/cmake:$VERSION --push \
+       --platform linux/amd64,linux/arm64 --build-arg cmake_version=$VERSION
